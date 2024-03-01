@@ -31,6 +31,18 @@ export const addNewProduct = async (req, res, next) => {
 
 export const getAllProducts = async (req, res, next) => {
   // Implement the functionality for search, filter and pagination this function.
+  try {
+    const {page,keyword,category,price,rating} = req.query;
+
+    const pageLimit = process.env.PRODUCT_LIMIT_PERPAGE;
+    const skip = (page - 1) * pageLimit;
+
+    const products = await getAllProductsRepo(skip,keyword,category,price,rating);
+    res.status(200).json({ success: true, products });
+
+  } catch (error) {
+    return next(new ErrorHandler(400, error));
+  }
 };
 
 export const updateProduct = async (req, res, next) => {
@@ -87,15 +99,19 @@ export const rateProduct = async (req, res, next) => {
     if (!rating) {
       return next(new ErrorHandler(400, "rating can't be empty"));
     }
+
+    if (Number(rating) < 0 || Number(rating) > 5) {
+      return next(new ErrorHandler(400, "rating should be in range of 0 to 5"));
+    }
     const product = await findProductRepo(productId);
     if (!product) {
       return next(new ErrorHandler(400, "Product not found!"));
     }
-    const findRevieweIndex = product.reviews.findIndex((rev) => {
+    const findReviewIndex = product.reviews.findIndex((rev) => {
       return rev.user.toString() === user.toString();
     });
-    if (findRevieweIndex >= 0) {
-      product.reviews.splice(findRevieweIndex, 1, review);
+    if (findReviewIndex >= 0) {
+      product.reviews.splice(findReviewIndex, 1, review);
     } else {
       product.reviews.push(review);
     }
@@ -151,8 +167,21 @@ export const deleteReview = async (req, res, next) => {
       return next(new ErrorHandler(400, "review doesn't exist"));
     }
 
+ // Only allow deletion of reviews by users who submitted the review
+    if(reviews[isReviewExistIndex].user !== req.user._id.toString()){
+      return next(new ErrorHandler(400, "You are not allowed to delete review of another user."));
+    }
+
     const reviewToBeDeleted = reviews[isReviewExistIndex];
     reviews.splice(isReviewExistIndex, 1);
+
+    // for updating rating after deleting review
+    let avgRating = 0;
+    product.reviews.forEach((rev) => {
+      avgRating += rev.rating;
+    });
+    const updatedRatingOfProduct = avgRating / product.reviews.length;
+    product.rating = updatedRatingOfProduct;
 
     await product.save({ validateBeforeSave: false });
     res.status(200).json({

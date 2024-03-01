@@ -13,7 +13,7 @@ const producSchema = new mongoose.Schema(
       required: [true, "product description name is required"],
       minLength: [
         10,
-        "product description should be atleat 10 characters long",
+        "product description should be at least 10 characters long",
       ],
     },
     price: {
