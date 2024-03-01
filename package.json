@@ -2,14 +2,14 @@
   "type": "module",
   "name": "not_decided",
   "version": "1.0.0",
-  "description": "",
+  "description": "this store-fleet project",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
   },
-  "author": "",
+  "author": "omkar",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,5 +21,16 @@
     "mongoose": "^7.6.3",
     "nodemailer": "^6.9.7",
     "validator": "^13.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Omkar6299/Node-CapstoneProject-StoreFleet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Omkar6299/Node-CapstoneProject-StoreFleet/issues"
+  },
+  "homepage": "https://github.com/Omkar6299/Node-CapstoneProject-StoreFleet#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

@@ -1,6 +1,5 @@
 import UserModel from "./user.schema.js";
 import mongoose from "mongoose";
-import { ObjectId } from "mongoose";
 
 export const createNewUserRepo = async (user) => {
   return await new UserModel(user).save();
@@ -26,6 +25,12 @@ export const updateUserProfileRepo = async (_id, data) => {
   });
 };
 
+export const updateUserPasswordRepo = async (_id, password) => {
+  const user =  await UserModel.findById(_id);
+  user.password = password;
+   await user.save();
+   return user;
+};
 export const getAllUsersRepo = async () => {
   return UserModel.find({});
 };
@@ -36,4 +41,10 @@ export const deleteUserRepo = async (_id) => {
 
 export const updateUserRoleAndProfileRepo = async (_id, data) => {
   // Write your code here for updating the roles of other users by admin
+  _id = new mongoose.Types.ObjectId(_id);
+  return await UserModel.findOneAndUpdate(_id, data, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
 };
