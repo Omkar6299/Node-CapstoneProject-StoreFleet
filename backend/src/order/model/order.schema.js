@@ -4,70 +4,84 @@ const orderSchema = new mongoose.Schema({
   shippingInfo: {
     address: {
       type: String,
-      required: true,
+      required: [true, "address is required"],
+      trim: true,
     },
     state: {
       type: String,
-      required: true,
+      required: [true, "State is required"],
+      trim: true,
     },
     country: {
       type: String,
-      required: true,
+      required: [true, "Country is required"],
+      trim: true,
       default: "IN",
     },
     pincode: {
       type: Number,
-      required: true,
+      required: [true, "pincode is required"],
+      trim: true,
     },
     phoneNumber: {
       type: Number,
-      required: true,
+      required: [true, "Phone number is required"],
+      trim: true,
     },
   },
   orderedItems: [
     {
       name: {
         type: String,
-        required: true,
+        required: [true, "order name is required"],
+        trim: true,
       },
       price: {
         type: Number,
-        required: true,
+        required: [true, "price is required"],
+        trim: true,
       },
       quantity: {
         type: Number,
-        required: true,
+        required: [true, "Quantity is required"],
+        trim: true,
       },
       image: {
         type: String,
-        required: true,
+        required: [true, "Image is required"],
+        trim: true,
       },
       product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-        required: true,
+        required: [true, "Product Id is required"],
+        trim: true,
       },
     },
   ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: [true, "User is required"],
+    trim: true,
   },
   paymentInfo: {
     id: {
       type: String,
-      required: true,
+      required: [true, "Payment info is required"],
+      trim: true,
     },
     status: {
       type: Boolean,
       default: false,
-      required: true,
+      required: [true, "status is required"],
+      trim: true,
     },
   },
   paidAt: {
     type: Date,
-    required: true,
+    required: [true, "Payment time is required"],
+    trim: true,
   },
   itemsPrice: {
     type: Number,
